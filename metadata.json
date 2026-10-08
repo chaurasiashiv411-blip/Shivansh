@@ -1,0 +1,6 @@
+{
+  "name": "DailyPulse - News & Articles",
+  "description": "A comprehensive news publication featuring breaking headlines, latest stories, India, world, technology, business, sports, and entertainment news.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
