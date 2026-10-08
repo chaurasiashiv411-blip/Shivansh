@@ -5,6 +5,7 @@ import { ShareBar } from '../components/ShareBar';
 import { AeoSection } from '../components/AeoSection';
 import { ArticleCard } from '../components/ArticleCard';
 import { updatePageSeo } from '../utils/seo';
+import { handleImageError } from '../utils/imageFallback';
 import { 
   ArrowLeft, 
   Clock, 
@@ -240,6 +241,7 @@ export const ArticlePage: React.FC<ArticlePageProps> = ({
             src={article.image}
             alt={article.imageAlt}
             loading="eager"
+            onError={handleImageError}
             className="w-full h-full object-cover"
             itemProp="image"
           />

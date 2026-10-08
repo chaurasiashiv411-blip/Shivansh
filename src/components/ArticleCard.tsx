@@ -1,6 +1,7 @@
 import React from 'react';
 import { Clock, User, ArrowUpRight } from 'lucide-react';
 import { Article } from '../types';
+import { handleImageError } from '../utils/imageFallback';
 
 interface ArticleCardProps {
   article: Article;
@@ -32,6 +33,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             src={article.image}
             alt={article.imageAlt}
             loading="eager"
+            onError={handleImageError}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
           />
           <div className="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-xs shadow-xs">
@@ -88,6 +90,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             src={article.image}
             alt={article.imageAlt}
             loading="lazy"
+            onError={handleImageError}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
           />
           <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
@@ -136,6 +139,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             src={article.image}
             alt={article.imageAlt}
             loading="lazy"
+            onError={handleImageError}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
@@ -206,6 +210,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           src={article.image}
           alt={article.imageAlt}
           loading="lazy"
+          onError={handleImageError}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-104"
         />
         <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
