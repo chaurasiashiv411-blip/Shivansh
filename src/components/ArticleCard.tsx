@@ -1,7 +1,8 @@
 import React from 'react';
 import { Clock, User, ArrowUpRight } from 'lucide-react';
 import { Article } from '../types';
-import { handleImageError } from '../utils/imageFallback';
+import { handleImageError, getOptimizedImageUrl } from '../utils/imageFallback';
+import { calculateReadingTime } from '../utils/readingTime';
 
 interface ArticleCardProps {
   article: Article;
@@ -15,6 +16,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   variant = 'grid'
 }) => {
   const articleUrl = `/news/${article.slug}/`;
+  const readingTime = calculateReadingTime(article.content);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,16 +27,18 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   if (variant === 'hero') {
     return (
       <article 
-        className="group bg-white border border-neutral-200 rounded-sm overflow-hidden hover:border-neutral-400 transition-all cursor-pointer flex flex-col lg:flex-row shadow-2xs"
+        className="group bg-white border border-neutral-200/90 rounded-sm overflow-hidden hover:border-neutral-400 hover:shadow-md transition-all cursor-pointer flex flex-col lg:flex-row"
         onClick={handleClick}
       >
         <div className="lg:w-7/12 relative overflow-hidden bg-neutral-100 aspect-16/10 sm:aspect-16/9 lg:aspect-auto">
           <img
-            src={article.image}
+            src={getOptimizedImageUrl(article.image, 1200)}
             alt={article.imageAlt}
+            width={1200}
+            height={750}
             loading="eager"
             onError={handleImageError}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
           />
           <div className="absolute top-3 left-3 bg-red-700 text-white text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-xs shadow-xs">
             {article.category}
@@ -43,12 +47,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         <div className="lg:w-5/12 p-6 sm:p-8 flex flex-col justify-between">
           <div>
             <div className="flex items-center text-xs text-neutral-500 mb-2.5 space-x-2">
-              <span className="font-semibold text-neutral-700">{article.source}</span>
+              <span className="font-semibold text-neutral-800">{article.source}</span>
               <span>•</span>
               <span className="flex items-center">
-                <Clock className="w-3.5 h-3.5 mr-1 text-neutral-400" />
+                <Clock className="w-3.5 h-3.5 mr-1 text-red-600" />
                 {article.publishedAt}
               </span>
+              <span>•</span>
+              <span className="text-neutral-500">{readingTime}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-serif font-black text-neutral-900 group-hover:text-red-700 transition-colors leading-tight mb-4">
               {article.title}
@@ -59,14 +65,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           </div>
 
           <div className="pt-4 border-t border-neutral-200 flex items-center justify-between">
-            <div className="flex items-center text-xs text-neutral-500">
+            <div className="flex items-center text-xs text-neutral-600">
               <User className="w-3.5 h-3.5 mr-1 text-neutral-400" />
-              <span className="truncate max-w-[180px]">{article.author}</span>
+              <span className="truncate max-w-[180px] font-medium">{article.author}</span>
             </div>
             <a
               href={articleUrl}
               onClick={handleClick}
-              className="inline-flex items-center text-xs font-bold text-red-700 hover:text-red-900 uppercase tracking-wider"
+              className="inline-flex items-center text-xs font-bold text-red-700 group-hover:text-red-900 uppercase tracking-wider group-hover:translate-x-0.5 transition-all"
               aria-label={`Read the full article: ${article.title}`}
             >
               Read Full Article
@@ -82,18 +88,20 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   if (variant === 'lead') {
     return (
       <article
-        className="group bg-white border border-neutral-200 rounded-sm overflow-hidden hover:border-neutral-400 transition-all cursor-pointer flex flex-col h-full shadow-2xs"
+        className="group bg-white border border-neutral-200/90 rounded-sm overflow-hidden hover:border-neutral-400 hover:shadow-md transition-all cursor-pointer flex flex-col h-full"
         onClick={handleClick}
       >
         <div className="relative overflow-hidden bg-neutral-100 aspect-16/10">
           <img
-            src={article.image}
+            src={getOptimizedImageUrl(article.image, 600)}
             alt={article.imageAlt}
+            width={600}
+            height={375}
             loading="lazy"
             onError={handleImageError}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
           />
-          <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
+          <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
             {article.category}
           </div>
         </div>
@@ -102,7 +110,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <div className="flex items-center text-xs text-neutral-500 mb-2 space-x-2">
               <span>{article.publishedAt}</span>
               <span>•</span>
-              <span>{article.readTime}</span>
+              <span className="text-neutral-600 font-medium">{readingTime}</span>
             </div>
             <h3 className="text-lg sm:text-xl font-serif font-bold text-neutral-900 group-hover:text-red-700 transition-colors leading-snug mb-2.5">
               {article.title}
@@ -112,14 +120,15 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             </p>
           </div>
           <div className="pt-3 border-t border-neutral-100 flex items-center justify-between text-xs">
-            <span className="text-neutral-500">{article.author}</span>
+            <span className="text-neutral-500 truncate max-w-[160px]">{article.author}</span>
             <a
               href={articleUrl}
               onClick={handleClick}
-              className="font-bold text-red-700 hover:underline uppercase tracking-wider text-[11px]"
+              className="font-bold text-red-700 hover:text-red-900 uppercase tracking-wider text-[11px] inline-flex items-center"
               aria-label={`Read the full article: ${article.title}`}
             >
               Read full article
+              <ArrowUpRight className="w-3 h-3 ml-0.5" />
             </a>
           </div>
         </div>
@@ -131,16 +140,18 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   if (variant === 'horizontal') {
     return (
       <article
-        className="group bg-white border border-neutral-200 rounded-sm p-3.5 hover:border-neutral-400 transition-all cursor-pointer flex gap-3.5 shadow-2xs"
+        className="group bg-white border border-neutral-200/90 rounded-sm p-3.5 hover:border-neutral-400 hover:shadow-xs transition-all cursor-pointer flex gap-3.5"
         onClick={handleClick}
       >
         <div className="w-28 sm:w-32 h-20 sm:h-24 flex-shrink-0 relative overflow-hidden bg-neutral-100 rounded-xs">
           <img
-            src={article.image}
+            src={getOptimizedImageUrl(article.image, 400)}
             alt={article.imageAlt}
+            width={320}
+            height={240}
             loading="lazy"
             onError={handleImageError}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-104"
           />
         </div>
         <div className="flex flex-col justify-between flex-1 min-w-0">
@@ -174,7 +185,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   if (variant === 'compact') {
     return (
       <article
-        className="group py-3 border-b border-neutral-200 last:border-b-0 cursor-pointer"
+        className="group py-3 border-b border-neutral-200/80 last:border-b-0 cursor-pointer"
         onClick={handleClick}
       >
         <div className="flex items-center text-[10px] font-bold text-red-700 uppercase tracking-wider mb-1">
@@ -185,11 +196,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         <h4 className="text-xs sm:text-sm font-semibold text-neutral-900 group-hover:text-red-700 transition-colors line-clamp-2 leading-snug">
           {article.title}
         </h4>
-        <div className="mt-1.5">
+        <div className="mt-1.5 flex items-center justify-between">
+          <span className="text-[10px] text-neutral-400">{readingTime}</span>
           <a
             href={articleUrl}
             onClick={handleClick}
-            className="text-[11px] font-medium text-neutral-500 hover:text-red-700 hover:underline"
+            className="text-[11px] font-medium text-neutral-500 group-hover:text-red-700 group-hover:underline"
             aria-label={`Read the full article: ${article.title}`}
           >
             Read story
@@ -202,18 +214,20 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   // 5. Standard Grid Card (default)
   return (
     <article
-      className="group bg-white border border-neutral-200 rounded-sm overflow-hidden hover:border-neutral-400 transition-all cursor-pointer flex flex-col h-full shadow-2xs"
+      className="group bg-white border border-neutral-200/90 rounded-sm overflow-hidden hover:border-neutral-400 hover:shadow-md transition-all cursor-pointer flex flex-col h-full"
       onClick={handleClick}
     >
       <div className="relative overflow-hidden bg-neutral-100 aspect-16/10">
         <img
-          src={article.image}
+          src={getOptimizedImageUrl(article.image, 600)}
           alt={article.imageAlt}
+          width={600}
+          height={375}
           loading="lazy"
           onError={handleImageError}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-104"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
         />
-        <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
+        <div className="absolute top-2.5 left-2.5 bg-neutral-900/90 backdrop-blur-xs text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-xs">
           {article.category}
         </div>
       </div>
@@ -222,7 +236,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <div className="flex items-center text-xs text-neutral-500 mb-2 space-x-2">
             <span>{article.publishedAt}</span>
             <span>•</span>
-            <span>{article.readTime}</span>
+            <span className="text-neutral-600 font-medium">{readingTime}</span>
           </div>
           <h3 className="text-base sm:text-lg font-serif font-bold text-neutral-900 group-hover:text-red-700 transition-colors leading-snug mb-2">
             {article.title}
@@ -236,7 +250,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <a
             href={articleUrl}
             onClick={handleClick}
-            className="font-bold text-red-700 hover:underline uppercase tracking-wider text-[11px] inline-flex items-center"
+            className="font-bold text-red-700 group-hover:text-red-900 uppercase tracking-wider text-[11px] inline-flex items-center group-hover:translate-x-0.5 transition-all"
             aria-label={`Read the full article: ${article.title}`}
           >
             Read full article

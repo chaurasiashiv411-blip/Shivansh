@@ -7,3 +7,10 @@ export const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event
     target.src = FALLBACK_NEWS_IMAGE;
   }
 };
+
+export const getOptimizedImageUrl = (url: string, width: number): string => {
+  if (url && url.includes('images.unsplash.com') && url.includes('w=')) {
+    return url.replace(/w=\d+/, `w=${width}`);
+  }
+  return url;
+};

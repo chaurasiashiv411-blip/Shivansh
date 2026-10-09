@@ -12,6 +12,8 @@ export interface Article {
   mainKeyword: string;
   relatedKeywords: [string, string];
   summary: string;
+  seoTitle?: string;
+  metaDescription?: string;
   content: string[];
   aeoQuestions: AeoQA[];
   keyTakeaways: string[];

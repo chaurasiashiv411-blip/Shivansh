@@ -30,6 +30,31 @@ export const Header: React.FC<HeaderProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [edition, setEdition] = useState<'India' | 'Global'>('India');
 
+  // Close menus on Escape key
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setSearchOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const formattedDate = React.useMemo(() => {
+    try {
+      return new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch {
+      return 'Friday, October 9, 2026';
+    }
+  }, []);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -49,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-6">
             <span className="flex items-center text-neutral-700 font-medium">
               <Calendar className="w-3.5 h-3.5 mr-1.5 text-neutral-500" />
-              Thursday, October 8, 2026
+              {formattedDate}
             </span>
             <span className="flex items-center text-neutral-600 border-l border-neutral-300 pl-4">
               <CloudSun className="w-3.5 h-3.5 mr-1.5 text-amber-500" />
@@ -104,7 +129,15 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Logo & Tagline */}
-          <div className="flex flex-col items-center sm:items-start text-center sm:text-left cursor-pointer" onClick={() => onNavigate('/')}>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/');
+            }}
+            className="flex flex-col items-center sm:items-start text-center sm:text-left focus:outline-none focus:ring-2 focus:ring-red-600 rounded"
+            aria-label="DailyPulse - Return to Homepage"
+          >
             <div className="flex items-center space-x-2">
               <span className="inline-flex items-center justify-center bg-red-700 text-white font-black text-xl sm:text-2xl px-2 py-0.5 rounded-sm tracking-tight shadow-xs">
                 DAILY
@@ -116,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-500 mt-0.5">
               Independent Global Reporting & Analysis
             </span>
-          </div>
+          </a>
 
           {/* Right Action Tools: Search & Saved Articles */}
           <div className="flex items-center space-x-2 sm:space-x-3">
@@ -152,12 +185,16 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Quick Explore Button */}
-            <button
-              onClick={() => onNavigate('/latest-news/')}
+            <a
+              href="/latest-news/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/latest-news/');
+              }}
               className="hidden md:inline-flex items-center bg-neutral-900 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
             >
               Live Feed
-            </button>
+            </a>
           </div>
         </div>
 
@@ -191,9 +228,13 @@ export const Header: React.FC<HeaderProps> = ({
               const isActive = currentPath === item.path;
               return (
                 <li key={item.path}>
-                  <button
-                    onClick={() => onNavigate(item.path)}
-                    className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-colors ${
+                  <a
+                    href={item.path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate(item.path);
+                    }}
+                    className={`inline-block px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded transition-colors ${
                       isActive
                         ? 'text-red-700 bg-red-50 border-b-2 border-red-700 font-extrabold'
                         : 'text-neutral-700 hover:text-red-700 hover:bg-neutral-100'
@@ -201,7 +242,7 @@ export const Header: React.FC<HeaderProps> = ({
                     aria-current={isActive ? 'page' : undefined}
                   >
                     {item.name}
-                  </button>
+                  </a>
                 </li>
               );
             })}
@@ -219,9 +260,11 @@ export const Header: React.FC<HeaderProps> = ({
             {NAV_ITEMS.map((item) => {
               const isActive = currentPath === item.path;
               return (
-                <button
+                <a
                   key={item.path}
-                  onClick={() => {
+                  href={item.path}
+                  onClick={(e) => {
+                    e.preventDefault();
                     onNavigate(item.path);
                     setMobileMenuOpen(false);
                   }}
@@ -230,10 +273,11 @@ export const Header: React.FC<HeaderProps> = ({
                       ? 'bg-red-50 text-red-700 font-bold border-l-4 border-red-700'
                       : 'text-neutral-700 hover:bg-neutral-100'
                   }`}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   <span>{item.name} News</span>
                   <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
-                </button>
+                </a>
               );
             })}
           </div>

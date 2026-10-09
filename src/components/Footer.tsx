@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUp, Mail, ShieldCheck, Newspaper, Globe, Sparkles } from 'lucide-react';
+import { ArrowUp, Mail, ShieldCheck, Newspaper, Globe, Sparkles, X } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (path: string) => void;
@@ -8,6 +8,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [policyModal, setPolicyModal] = useState<'terms' | 'privacy' | 'editorial' | null>(null);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,14 +45,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-10 border-b border-neutral-800">
           {/* Brand Col */}
           <div className="lg:col-span-2 pr-0 lg:pr-6">
-            <div className="flex items-center space-x-2 mb-3 cursor-pointer" onClick={() => onNavigate('/')}>
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate('/');
+              }}
+              className="inline-flex items-center space-x-2 mb-3 focus:outline-none focus:ring-1 focus:ring-red-500 rounded"
+              aria-label="DailyPulse - Return to Homepage"
+            >
               <span className="inline-flex items-center justify-center bg-red-700 text-white font-black text-xl px-2 py-0.5 rounded-sm tracking-tight">
                 DAILY
               </span>
               <span className="text-2xl font-black tracking-tight text-white font-serif">
                 PULSE
               </span>
-            </div>
+            </a>
             <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed mb-4">
               DailyPulse delivers comprehensive, verified reporting across international diplomacy, national policy, cutting-edge technology, global finance, and cultural milestones.
             </p>
@@ -75,40 +84,56 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <button
-                  onClick={() => onNavigate('/latest-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/latest-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/latest-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Read latest news today"
                 >
                   View latest news today
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/india-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/india-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/india-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="View all India news"
                 >
                   View all India news
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/world-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/world-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/world-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Read international world news"
                 >
                   Read international world news
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/technology-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/technology-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/technology-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Read the latest technology news"
                 >
                   Read the latest technology news
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -120,40 +145,56 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <button
-                  onClick={() => onNavigate('/business-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/business-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/business-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Catch up on business news today"
                 >
                   Catch up on business news today
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/sports-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/sports-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/sports-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Explore today's sports news"
                 >
                   Explore today's sports news
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/entertainment-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/entertainment-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/entertainment-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Browse latest entertainment news"
                 >
                   Browse latest entertainment news
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  onClick={() => onNavigate('/latest-news/')}
-                  className="hover:text-white hover:underline text-left transition-colors"
+                <a
+                  href="/latest-news/"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate('/latest-news/');
+                  }}
+                  className="hover:text-white hover:underline text-left transition-colors inline-block"
                   title="Explore breaking headlines"
                 >
                   Explore breaking headlines
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -199,9 +240,24 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <span>© {new Date().getFullYear()} DailyPulse Demonstration News.</span>
             <span>All rights reserved.</span>
             <span className="text-neutral-600">|</span>
-            <button onClick={() => onNavigate('/')} className="hover:text-neutral-300">Terms of Use</button>
-            <button onClick={() => onNavigate('/')} className="hover:text-neutral-300">Privacy Policy</button>
-            <button onClick={() => onNavigate('/')} className="hover:text-neutral-300">Editorial Guidelines</button>
+            <button
+              onClick={() => setPolicyModal('terms')}
+              className="hover:text-neutral-300 underline underline-offset-2 transition-colors"
+            >
+              Terms of Use
+            </button>
+            <button
+              onClick={() => setPolicyModal('privacy')}
+              className="hover:text-neutral-300 underline underline-offset-2 transition-colors"
+            >
+              Privacy Policy
+            </button>
+            <button
+              onClick={() => setPolicyModal('editorial')}
+              className="hover:text-neutral-300 underline underline-offset-2 transition-colors"
+            >
+              Editorial Guidelines
+            </button>
           </div>
           
           <button
@@ -214,6 +270,66 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </button>
         </div>
       </div>
+
+      {/* Policy Preview Modal */}
+      {policyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+          <div className="bg-white text-neutral-900 rounded-sm max-w-lg w-full p-6 shadow-xl relative border border-neutral-200">
+            <button
+              onClick={() => setPolicyModal(null)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 p-1"
+              aria-label="Close dialog"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {policyModal === 'terms' && (
+              <div>
+                <h3 className="text-lg font-serif font-bold text-neutral-900 mb-2">Terms of Use (Demonstration)</h3>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  DailyPulse is a demonstration news publication created for testing, architectural validation, and responsive interface evaluation. Content presented comprises sample journalism articles and illustrative scenarios.
+                </p>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  By accessing this demonstration site, you agree to evaluate its layout and technical capabilities without treating sample articles as real-time financial or legal counsel.
+                </p>
+              </div>
+            )}
+
+            {policyModal === 'privacy' && (
+              <div>
+                <h3 className="text-lg font-serif font-bold text-neutral-900 mb-2">Privacy Policy (Demonstration)</h3>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  DailyPulse values reader privacy. In this demonstration environment, no personal data, browsing telemetry, or third-party advertising cookies are stored or shared with external trackers.
+                </p>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  Simulated subscription forms and interactive search queries operate strictly within client session storage.
+                </p>
+              </div>
+            )}
+
+            {policyModal === 'editorial' && (
+              <div>
+                <h3 className="text-lg font-serif font-bold text-neutral-900 mb-2">Editorial Guidelines (Demonstration)</h3>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  DailyPulse upholds foundational journalistic standards: factual verification, primary source attribution, and non-partisan analysis across international affairs, science, and governance.
+                </p>
+                <p className="text-xs text-neutral-600 leading-relaxed mb-4">
+                  Demonstration stories maintain realistic tone while clearly signaling their testing purpose to avoid misinformation.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 pt-3 border-t border-neutral-100 flex justify-end">
+              <button
+                onClick={() => setPolicyModal(null)}
+                className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold px-4 py-1.5 rounded"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 };

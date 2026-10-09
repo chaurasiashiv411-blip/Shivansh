@@ -35,16 +35,21 @@ export const SearchPage: React.FC<SearchPageProps> = ({
   }, [initialQuery]);
 
   useEffect(() => {
-    const pageTitle = initialQuery 
-      ? `Search results for "${initialQuery}" | DailyPulse`
+    const cleanQuery = initialQuery.trim();
+    const pageTitle = cleanQuery 
+      ? `Search results for "${cleanQuery.slice(0, 40)}" | DailyPulse`
       : 'Search News & Articles | DailyPulse';
+    
+    const pageDescription = cleanQuery
+      ? `Browse news search results for "${cleanQuery.slice(0, 40)}" on DailyPulse. Read verified reports, beat analysis, and related stories across all publication sections.`
+      : 'Search DailyPulse to find verified news reporting, breaking updates, and in-depth articles across national policy, technology, world affairs, and business.';
     
     updatePageSeo({
       title: pageTitle,
-      description: `Search results and in-depth articles matching "${initialQuery || 'news'}" on DailyPulse.`,
-      canonicalUrl: `${window.location.origin}/search/?q=${encodeURIComponent(initialQuery)}`,
+      description: pageDescription,
+      canonicalUrl: `${window.location.origin}/search/?q=${encodeURIComponent(cleanQuery)}`,
       type: 'website',
-      keywords: ['news search', 'search headlines', initialQuery].filter(Boolean)
+      keywords: ['news search', 'search headlines', cleanQuery].filter(Boolean)
     });
   }, [initialQuery]);
 

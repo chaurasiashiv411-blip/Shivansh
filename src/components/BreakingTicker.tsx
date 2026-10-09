@@ -29,15 +29,21 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({ articles, onNavi
           className="relative flex-1 overflow-hidden ml-4 flex items-center"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
         >
           <div 
             className={`flex items-center space-x-8 whitespace-nowrap ${isPaused ? '' : 'animate-[ticker_35s_linear_infinite]'}`}
             style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
           >
             {tickerItems.concat(tickerItems).map((art, idx) => (
-              <button
+              <a
                 key={`${art.id}-${idx}`}
-                onClick={() => onNavigate(`/news/${art.slug}/`)}
+                href={`/news/${art.slug}/`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate(`/news/${art.slug}/`);
+                }}
                 className="inline-flex items-center text-neutral-200 hover:text-white hover:underline focus:outline-none focus:ring-1 focus:ring-red-500 rounded px-1 transition-colors text-xs sm:text-sm"
                 title={`Read breaking story: ${art.title}`}
               >
@@ -45,7 +51,7 @@ export const BreakingTicker: React.FC<BreakingTickerProps> = ({ articles, onNavi
                 <span className="font-semibold text-neutral-400 mr-1.5">[{art.category.replace(' News', '')}]</span>
                 <span className="truncate max-w-xs sm:max-w-md md:max-w-none">{art.title}</span>
                 <ChevronRight className="w-3.5 h-3.5 text-neutral-500 ml-1 opacity-70" />
-              </button>
+              </a>
             ))}
           </div>
         </div>
